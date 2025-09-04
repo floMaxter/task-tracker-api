@@ -1,0 +1,13 @@
+### POST USER
+POST localhost:8081/api/v1/users
+Content-Type: application/json
+
+{
+  "username": "Username_1",
+  "email": "username_1@gmail.com",
+  "password": "password"
+}
+
+
+### GET USER
+GET localhost:8081/api/v1/users/4
