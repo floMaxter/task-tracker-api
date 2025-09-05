@@ -2,3 +2,4 @@ rootProject.name = 'task-tracker-api'
 
 include 'user-service'
 include 'config-server'
+include 'discovery-server'

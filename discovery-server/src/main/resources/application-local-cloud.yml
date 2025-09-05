@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: discovery-server
+  config:
+    activate:
+      on-profile: local-cloud
+    import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}
