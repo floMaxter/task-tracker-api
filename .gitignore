@@ -20,3 +20,5 @@ logs/
 # Environment variables
 .env*
 !.env.standalone
+!.env.cloud
+!.env.native
