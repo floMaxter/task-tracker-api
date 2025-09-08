@@ -1,6 +1,4 @@
 spring:
-  application:
-    name: discovery-server
   config:
     activate:
       on-profile: local-cloud

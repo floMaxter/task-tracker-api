@@ -2,8 +2,6 @@ server:
   port: ${SERVER_PORT}
 
 spring:
-  application:
-    name: config-server
   config:
     import: optional:file:./config-server/.env.native[.properties]
     activate:

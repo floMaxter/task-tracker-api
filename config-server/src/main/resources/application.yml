@@ -1,6 +1,3 @@
 spring:
   application:
     name: config-server
-  config:
-    activate:
-      on-profile: ${SPRING_PROFILES_ACTIVE:native}
