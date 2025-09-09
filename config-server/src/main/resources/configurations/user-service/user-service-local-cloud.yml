@@ -26,7 +26,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
 
-logging:
-  level:
-    root: INFO
+app:
+  constraints:
+    messages:
+      idx_users_email: "Email already exists"
