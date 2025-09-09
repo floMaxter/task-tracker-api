@@ -1,13 +1,25 @@
+### GET USER
+GET localhost:8081/api/v1/users/2
+
 ### POST USER
 POST localhost:8081/api/v1/users
 Content-Type: application/json
 
 {
-  "username": "Username_1",
-  "email": "username_1@gmail.com",
+  "username": "Username_3",
+  "email": "username_3@gmail.com",
   "password": "password"
 }
 
+### GET USER USING GATEWAY
+GET localhost:8222/api/v1/users/15
 
-### GET USER
-GET localhost:8081/api/v1/users/4
+### POST USER USING GATEWAY
+POST localhost:8222/api/v1/users
+Content-Type: application/json
+
+{
+  "username": "Username_4",
+  "email": "username_4@gmail.com",
+  "password": "password"
+}
