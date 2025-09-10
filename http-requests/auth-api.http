@@ -1,0 +1,19 @@
+### SIGN-UP
+POST localhost:8081/api/v1/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "Username_12",
+  "email": "username_12@gmail.com",
+  "password": "password"
+}
+
+### SIGN-IN
+# @no-cookie-jar
+POST localhost:8081/api/v1/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "username_12@gmail.com",
+  "password": "password"
+}

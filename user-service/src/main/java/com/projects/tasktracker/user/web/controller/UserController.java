@@ -2,7 +2,10 @@ package com.projects.tasktracker.user.web.controller;
 
 import com.projects.tasktracker.user.service.UserService;
 import com.projects.tasktracker.user.web.dto.request.CreateUserRequest;
+import com.projects.tasktracker.user.web.dto.response.CreateUserResponse;
+import com.projects.tasktracker.user.web.dto.response.UserCredentialsResponse;
 import com.projects.tasktracker.user.web.dto.response.UserResponse;
+import com.projects.tasktracker.user.web.dto.response.UserSummaryResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
@@ -26,8 +29,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public void createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
-        userService.createUser(createUserRequest);
+    public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
+        return userService.createUser(createUserRequest);
     }
 
     @GetMapping("/{user-id}")
@@ -35,5 +38,15 @@ public class UserController {
     public UserResponse findUserById(@PathVariable("user-id")
                                      @Positive(message = "Id must be positive") Long userId) {
         return userService.findById(userId);
+    }
+
+    @GetMapping("/by-email/{email}/credentials")
+    public UserCredentialsResponse getUserCredentialsByEmail(@PathVariable("email") String email) {
+        return userService.getUserCredentialsByEmail(email);
+    }
+
+    @GetMapping("/by-email/{email}/summary")
+    public UserSummaryResponse getUserSummaryByEmail(@PathVariable("email") String email) {
+        return userService.getUserSummaryByEmail(email);
     }
 }

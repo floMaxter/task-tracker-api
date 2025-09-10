@@ -1,0 +1,30 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  config:
+    import: optional:file:./user-service/.env.standalone[.properties]
+    activate:
+      on-profile: local-cloud
+eureka:
+  instance:
+    hostname: ${SERVER_HOST:localhost}
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+application:
+  services:
+    user-service:
+      base-uri: http://user-service
+      connection-timeout: 5s
+      read-timeout: 10s
+  jwt:
+    access-token:
+      secret: ${ACCESS_TOKEN_SECRET:defaultAccessSecret}
+      expiration: ${ACCESS_TOKEN_EXPIRATION:30m}
+    refresh-token:
+      secret: ${REFRESH_TOKEN_SECRET:defaultAccessSecret}
+      expiration: ${REFRESH_TOKEN_EXPIRATION:1d}
