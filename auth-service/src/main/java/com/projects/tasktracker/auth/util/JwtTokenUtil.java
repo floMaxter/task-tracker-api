@@ -1,12 +1,16 @@
 package com.projects.tasktracker.auth.util;
 
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.experimental.UtilityClass;
 import org.springframework.http.HttpHeaders;
+import org.springframework.web.util.WebUtils;
 
 @UtilityClass
-public class TokenResponseUtil {
+public class JwtTokenUtil {
+
+    private static final String BEARER_PREFIX = "Bearer ";
 
     public void addTokens(HttpHeaders headers,
                           HttpServletResponse resp,
@@ -27,5 +31,18 @@ public class TokenResponseUtil {
         cookie.setPath("/");
         cookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(cookie);
+    }
+
+    public String extractAccessToken(HttpServletRequest req) {
+        var authHeader = req.getHeader(HttpHeaders.AUTHORIZATION);
+        if (authHeader != null && authHeader.startsWith(BEARER_PREFIX)) {
+            return authHeader.substring(BEARER_PREFIX.length());
+        }
+        return null;
+    }
+
+    public String extractRefreshToken(HttpServletRequest req) {
+        var cookie = WebUtils.getCookie(req, "refreshToken");
+        return cookie != null ? cookie.getValue() : null;
     }
 }

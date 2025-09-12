@@ -1,15 +1,17 @@
 package com.projects.tasktracker.auth.web.controller;
 
 import com.projects.tasktracker.auth.service.AuthService;
-import com.projects.tasktracker.auth.util.TokenResponseUtil;
+import com.projects.tasktracker.auth.util.JwtTokenUtil;
 import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
 import com.projects.tasktracker.auth.web.dto.response.SignInResponse;
 import com.projects.tasktracker.auth.web.dto.response.SignUpResponse;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +31,7 @@ public class AuthController {
         var signUpResult = authService.signUp(signUpRequest);
 
         var headers = new HttpHeaders();
-        TokenResponseUtil.addTokens(headers, resp, signUpResult.jwtAccessToken(), signUpResult.jwtRefreshToken());
+        JwtTokenUtil.addTokens(headers, resp, signUpResult.jwtAccessToken(), signUpResult.jwtRefreshToken());
 
         var signUpResponse = new SignUpResponse(signUpRequest.username(), signUpRequest.email());
 
@@ -44,12 +46,20 @@ public class AuthController {
         var signInResult = authService.signIn(signInRequest);
 
         var headers = new HttpHeaders();
-        TokenResponseUtil.addTokens(headers, resp, signInResult.jwtAccessToken(), signInResult.jwtRefreshToken());
+        JwtTokenUtil.addTokens(headers, resp, signInResult.jwtAccessToken(), signInResult.jwtRefreshToken());
 
         var signInResponse = new SignInResponse(signInResult.id(), signInResult.email());
 
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(signInResponse);
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<Void> validateToken(HttpServletRequest req) {
+        var accessToken = JwtTokenUtil.extractAccessToken(req);
+        return authService.validateAccessToken(accessToken)
+                ? ResponseEntity.ok().build()
+                :  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
     }
 }

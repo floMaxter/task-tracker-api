@@ -7,6 +7,7 @@ import com.projects.tasktracker.auth.web.dto.internal.SignInResult;
 import com.projects.tasktracker.auth.web.dto.internal.SignUpResult;
 import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -54,5 +55,9 @@ public class AuthService {
                 .jwtAccessToken(accessToken)
                 .jwtRefreshToken(refreshToken)
                 .build();
+    }
+
+    public boolean validateAccessToken(@NotNull String accessToken) {
+        return jwtService.validateAccessToken(accessToken);
     }
 }
