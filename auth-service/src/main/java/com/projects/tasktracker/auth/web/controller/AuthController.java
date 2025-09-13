@@ -1,11 +1,13 @@
 package com.projects.tasktracker.auth.web.controller;
 
+import com.projects.tasktracker.auth.security.jwt.JwtService;
 import com.projects.tasktracker.auth.service.AuthService;
 import com.projects.tasktracker.auth.util.JwtTokenUtil;
 import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
 import com.projects.tasktracker.auth.web.dto.response.SignInResponse;
 import com.projects.tasktracker.auth.web.dto.response.SignUpResponse;
+import com.projects.tasktracker.auth.web.dto.response.ValidateTokenResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtService jwtService;
 
     @PostMapping("/sign-up")
     public ResponseEntity<SignUpResponse> signUp(@Valid @RequestBody SignUpRequest signUpRequest,
@@ -56,10 +59,14 @@ public class AuthController {
     }
 
     @PostMapping("/validate")
-    public ResponseEntity<Void> validateToken(HttpServletRequest req) {
+    public ResponseEntity<ValidateTokenResponse> validateToken(HttpServletRequest req) {
         var accessToken = JwtTokenUtil.extractAccessToken(req);
-        return authService.validateAccessToken(accessToken)
-                ? ResponseEntity.ok().build()
-                :  ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+        if (jwtService.validateAccessToken(accessToken)) {
+            var email = jwtService.getEmail(accessToken);
+            return ResponseEntity.ok(new ValidateTokenResponse(email));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 }

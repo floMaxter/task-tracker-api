@@ -20,7 +20,28 @@ Content-Type: application/json
 
 ### Validate access token
 POST localhost:8081/api/v1/auth/validate
-Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZV8xMkBnbWFpbC5jb20iLCJpYXQiOjE3NTc2NjAyNDksImV4cCI6MTc1NzY2MjA0OX0.TakzHlwGNvOTe6Ofeo2--yULtn-UPwZvF15hGMc-ohE
+Authorization: Bearer
 
-### Test endpoint
-GET localhost:8081/api/tests/hello
+### SIGN-UP using gateway
+POST localhost:8222/api/v1/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "Username_12",
+  "email": "username_12@gmail.com",
+  "password": "password"
+}
+
+### SIGN-IN using gateway
+POST localhost:8222/api/v1/auth/sign-in
+Content-Type: application/json
+
+{
+  "email": "username_12@gmail.com",
+  "password": "password"
+}
+
+### Validate access token using gateway
+POST localhost:8222/api/v1/auth/validate
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZV8xMkBnbWFpbC5jb20iLCJpYXQiOjE3NTc2NjIzMjMsImV4cCI6MTc1NzY2NDEyM30.k2gpCsYuGytCrvr0Qt4ucwL42Ut5rywY3aqx7XoSWko
+

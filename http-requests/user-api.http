@@ -13,13 +13,15 @@ Content-Type: application/json
 
 ### GET USER USING GATEWAY
 GET localhost:8222/api/v1/users/15
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZV8xMkBnbWFpbC5jb20iLCJpYXQiOjE3NTc3Njg5NTMsImV4cCI6MTc1Nzc3MDc1M30.YNNjXvTKjB2N1vrfPX13aJPK8usaRzgUHqYzHtGUnWM
 
 ### POST USER USING GATEWAY
 POST localhost:8222/api/v1/users
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZV8xMkBnbWFpbC5jb20iLCJpYXQiOjE3NTc2OTcwNjUsImV4cCI6MTc1NzY5ODg2NX0.BhAQ50CWLxFLGVIHOoH98OE2p7GJBYKhv8khNNgLU6U
 
 {
-  "username": "Username_4",
-  "email": "username_4@gmail.com",
+  "username": "Username_20",
+  "email": "username_20@gmail.com",
   "password": "password"
 }
