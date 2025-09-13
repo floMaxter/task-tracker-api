@@ -3,7 +3,7 @@ server:
 
 spring:
   config:
-    import: optional:file:./user-service/.env.standalone[.properties]
+    import: optional:file:./user-service/.env.local-cloud[.properties]
     activate:
       on-profile: local-cloud
   datasource:
