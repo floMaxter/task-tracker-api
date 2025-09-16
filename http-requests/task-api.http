@@ -1,0 +1,9 @@
+### Create task using gateway
+POST localhost:8222/api/v1/tasks
+Authorization: Bearer eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiIyNyIsImVtYWlsIjoidXNlcm5hbWVfMTJAZ21haWwuY29tIiwiaWF0IjoxNzU4MDI5Njc1LCJleHAiOjE3NTgwMzE0NzV9.KhdmCbtcypQPpmSHT4febxUvMU8-al-mJaBhjnfAj_jO3AaXPLJ5i4f1hSQ5m-ysKHArgyNAXn4buHM9aUio0kYOB7KEyI61yMZoY5vOHzQWU4CxLilrQCrtiMZwsUVSKsOO7CjQuZBjQI_bgVKCE9t_z4zeH5HOGReiqtApcN5vI6UrqyW2RKyjKtWUC15ljyTea19hWlOL33rXYeKmwbOkdtSaW28bT6N4rzdxVF9W4E7cBxgpqY_7HUByD-2rHO4VFgrGe47atguIijVkBrD2ApQYp2H0YQ-WfP0CfIB_AuovfzLKWrOA7hOpIwcTv1nl03CX0O6LcqrUD9G7pQ
+Content-Type: application/json
+
+{
+  "title": "Second task",
+  "description": "Description of second task"
+}

@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: task-service
+
+logging:
+  level:
+    root: info

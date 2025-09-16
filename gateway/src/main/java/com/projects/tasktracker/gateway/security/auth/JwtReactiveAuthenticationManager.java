@@ -35,11 +35,10 @@ public class JwtReactiveAuthenticationManager implements ReactiveAuthenticationM
                     .parseSignedClaims(token)
                     .getPayload();
 
-            return Mono.just(new UsernamePasswordAuthenticationToken(
-                    claims.getSubject(),
-                    null,
-                    List.of()
-            ));
+            var auth = new UsernamePasswordAuthenticationToken(claims.getSubject(), null, List.of());
+            auth.setDetails(claims);
+
+            return Mono.just(auth);
         } catch (JwtException e) {
             return Mono.error(new BadCredentialsException("Invalid JWT token", e));
         }
