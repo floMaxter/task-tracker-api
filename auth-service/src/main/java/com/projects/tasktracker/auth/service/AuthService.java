@@ -5,14 +5,17 @@ import com.projects.tasktracker.auth.client.user.dto.request.CreateUserRequest;
 import com.projects.tasktracker.auth.security.jwt.JwtService;
 import com.projects.tasktracker.auth.web.dto.internal.SignInResult;
 import com.projects.tasktracker.auth.web.dto.internal.SignUpResult;
+import com.projects.tasktracker.auth.web.dto.internal.UserPrincipal;
 import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
-import jakarta.validation.constraints.NotNull;
+import com.projects.tasktracker.auth.web.dto.response.PublicKeyResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
+
+import java.util.Base64;
 
 @Slf4j
 @Service
@@ -30,8 +33,10 @@ public class AuthService {
                 .password(signUpRequest.password())
                 .build()
         );
-        var accessToken = jwtService.generateAccessToken(createdUser.email());
-        var refreshToken = jwtService.generateRefreshToken(createdUser.email());
+
+        var userPrincipal = new UserPrincipal(createdUser.id(), createdUser.email());
+        var accessToken = jwtService.generateAccessToken(userPrincipal);
+        var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
         return SignUpResult.builder()
                 .username(createdUser.username())
@@ -44,10 +49,11 @@ public class AuthService {
     public SignInResult signIn(SignInRequest signInRequest) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(signInRequest.email(), signInRequest.password()));
 
-        var accessToken = jwtService.generateAccessToken(signInRequest.email());
-        var refreshToken = jwtService.generateRefreshToken(signInRequest.email());
-
         var userSummary = userServiceClient.getUserSummaryByEmail(signInRequest.email());
+
+        var userPrincipal = new UserPrincipal(userSummary.id(), userSummary.email());
+        var accessToken = jwtService.generateAccessToken(userPrincipal);
+        var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
         return SignInResult.builder()
                 .id(userSummary.id())
@@ -57,7 +63,10 @@ public class AuthService {
                 .build();
     }
 
-    public boolean validateAccessToken(@NotNull String accessToken) {
-        return jwtService.validateAccessToken(accessToken);
+    public PublicKeyResponse getAccessTokenPublicKey() {
+        var publicKey = jwtService.getAccessTokenPublicKey();
+        var encodedKey = Base64.getEncoder().encodeToString(publicKey.getEncoded());
+
+        return new PublicKeyResponse(encodedKey);
     }
 }

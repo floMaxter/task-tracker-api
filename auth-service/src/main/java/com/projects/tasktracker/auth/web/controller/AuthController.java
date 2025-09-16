@@ -5,6 +5,7 @@ import com.projects.tasktracker.auth.service.AuthService;
 import com.projects.tasktracker.auth.util.JwtTokenUtil;
 import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
+import com.projects.tasktracker.auth.web.dto.response.PublicKeyResponse;
 import com.projects.tasktracker.auth.web.dto.response.SignInResponse;
 import com.projects.tasktracker.auth.web.dto.response.SignUpResponse;
 import com.projects.tasktracker.auth.web.dto.response.ValidateTokenResponse;
@@ -15,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -56,6 +58,12 @@ public class AuthController {
         return ResponseEntity.ok()
                 .headers(headers)
                 .body(signInResponse);
+    }
+
+    @GetMapping("/public-keys/access")
+    public ResponseEntity<PublicKeyResponse> getAccessTokenPublicKey() {
+        var accessTokenPublicKey = authService.getAccessTokenPublicKey();
+        return ResponseEntity.ok(accessTokenPublicKey);
     }
 
     @PostMapping("/validate")

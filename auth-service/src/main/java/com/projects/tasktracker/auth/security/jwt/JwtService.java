@@ -1,18 +1,18 @@
 package com.projects.tasktracker.auth.security.jwt;
 
+import com.projects.tasktracker.auth.web.dto.internal.UserPrincipal;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import javax.crypto.SecretKey;
+import java.security.PublicKey;
 import java.util.Date;
 
 @Slf4j
@@ -21,34 +21,52 @@ import java.util.Date;
 public class JwtService {
 
     private final JwtProperties jwtProperties;
+    private final JwtKeyLoader jwtKeyLoader;
 
-    public String generateAccessToken(String email) {
+    @PostConstruct
+    public void initJwtKeys() {
+        var privateKey = jwtKeyLoader.loadPrivateKey(jwtProperties.getAccessTokenPrivateKeyPath());
+        var publicKey = jwtKeyLoader.loadPublicKey(jwtProperties.getAccessTokenPublicKeyPath());
+
+        jwtProperties.setAccessTokenPrivateKey(privateKey);
+        jwtProperties.setAccessTokenPublicKey(publicKey);
+        jwtProperties.setRefreshTokenPrivateKey(privateKey);
+        jwtProperties.setRefreshTokenPublicKey(publicKey);
+    }
+
+    public String generateAccessToken(UserPrincipal principal) {
         var issueDate = new Date();
-        var expiredDate = new Date(issueDate.getTime() + jwtProperties.getAccessToken().getExpiration().toMillis());
+        var expiredDate = new Date(issueDate.getTime() + jwtProperties.getAccessTokenExpiration().toMillis());
         return Jwts.builder()
-                .subject(email)
+                .subject(principal.id().toString())
+                .claim("email", principal.email())
                 .issuedAt(issueDate)
                 .expiration(expiredDate)
-                .signWith(getJwtAccessSecret())
+                .signWith(jwtProperties.getAccessTokenPrivateKey())
                 .compact();
     }
 
-    public String generateRefreshToken(String email) {
+    public String generateRefreshToken(UserPrincipal principal) {
         var issueDate = new Date();
-        var expiredDate = new Date(issueDate.getTime() + jwtProperties.getRefreshToken().getExpiration().toMillis());
+        var expiredDate = new Date(issueDate.getTime() + jwtProperties.getRefreshTokenExpiration().toMillis());
         return Jwts.builder()
-                .subject(email)
+                .subject(principal.id().toString())
+                .claim("email", principal.email())
                 .issuedAt(issueDate)
                 .expiration(expiredDate)
-                .signWith(getJwtRefreshSecret())
+                .signWith(jwtProperties.getRefreshTokenPrivateKey())
                 .compact();
+    }
+
+    public PublicKey getAccessTokenPublicKey() {
+        return this.jwtProperties.getAccessTokenPublicKey();
     }
 
     public boolean validateAccessToken(String accessToken) {
-        return validateToken(accessToken, this.getJwtAccessSecret());
+        return validateToken(accessToken, jwtProperties.getAccessTokenPublicKey());
     }
 
-    private boolean validateToken(String token, SecretKey secret) {
+    private boolean validateToken(String token, PublicKey secret) {
         try {
             Jwts.parser()
                     .verifyWith(secret)
@@ -75,17 +93,9 @@ public class JwtService {
 
     private Claims getAllClaimsFromToken(String token) {
         return Jwts.parser()
-                .verifyWith(getJwtAccessSecret())
+                .verifyWith(jwtProperties.getAccessTokenPublicKey())
                 .build()
                 .parseSignedClaims(token)
                 .getPayload();
-    }
-
-    private SecretKey getJwtAccessSecret() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getAccessToken().getSecret()));
-    }
-
-    private SecretKey getJwtRefreshSecret() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getRefreshToken().getSecret()));
     }
 }
