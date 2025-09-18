@@ -2,6 +2,8 @@ package com.projects.tasktracker.auth.service;
 
 import com.projects.tasktracker.auth.client.user.UserServiceClient;
 import com.projects.tasktracker.auth.client.user.dto.request.CreateUserRequest;
+import com.projects.tasktracker.auth.messaging.event.EmailSendingTaskMessage;
+import com.projects.tasktracker.auth.messaging.producer.AuthEventProducer;
 import com.projects.tasktracker.auth.security.jwt.JwtService;
 import com.projects.tasktracker.auth.web.dto.internal.SignInResult;
 import com.projects.tasktracker.auth.web.dto.internal.SignUpResult;
@@ -25,6 +27,7 @@ public class AuthService {
     private final UserServiceClient userServiceClient;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AuthEventProducer authEventProducer;
 
     public SignUpResult signUp(SignUpRequest signUpRequest) {
         var createdUser = userServiceClient.createUser(CreateUserRequest.builder()
@@ -37,6 +40,12 @@ public class AuthService {
         var userPrincipal = new UserPrincipal(createdUser.id(), createdUser.email());
         var accessToken = jwtService.generateAccessToken(userPrincipal);
         var refreshToken = jwtService.generateRefreshToken(userPrincipal);
+
+        authEventProducer.sendUserRegisteredEvent(EmailSendingTaskMessage.builder()
+                        .email(createdUser.email())
+                        .title("Task tracker greeting")
+                        .message(String.format("Hello, %s! Thank you for choosing to use our task tracker.", createdUser.username()))
+                .build());
 
         return SignUpResult.builder()
                 .username(createdUser.username())
