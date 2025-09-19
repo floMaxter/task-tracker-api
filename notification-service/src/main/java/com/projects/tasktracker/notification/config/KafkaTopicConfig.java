@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.config.TopicBuilder;
 
+import java.util.Map;
+
 @Configuration
 @RequiredArgsConstructor
 public class KafkaTopicConfig {
@@ -17,6 +19,9 @@ public class KafkaTopicConfig {
     public NewTopic emailSendingTopic() {
         return TopicBuilder
                 .name(kafkaTopicProperties.getEmailSendingTasks())
+                .partitions(3)
+                .replicas(3)
+                .configs(Map.of("min.insync.replicas", "2"))
                 .build();
     }
 }

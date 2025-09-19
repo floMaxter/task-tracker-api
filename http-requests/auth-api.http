@@ -28,8 +28,8 @@ POST localhost:8222/api/v1/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "Username_28",
-  "email": "username_28@gmail.com",
+  "username": "Username_29",
+  "email": "username_29@gmail.com",
   "password": "password"
 }
 

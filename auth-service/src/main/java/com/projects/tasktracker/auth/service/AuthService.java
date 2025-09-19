@@ -2,8 +2,8 @@ package com.projects.tasktracker.auth.service;
 
 import com.projects.tasktracker.auth.client.user.UserServiceClient;
 import com.projects.tasktracker.auth.client.user.dto.request.CreateUserRequest;
-import com.projects.tasktracker.auth.messaging.event.EmailSendingTaskMessage;
-import com.projects.tasktracker.auth.messaging.producer.AuthEventProducer;
+import com.projects.tasktracker.auth.kafka.event.UserWelcomeEmailEvent;
+import com.projects.tasktracker.auth.kafka.producer.AuthEventProducer;
 import com.projects.tasktracker.auth.security.jwt.JwtService;
 import com.projects.tasktracker.auth.web.dto.internal.SignInResult;
 import com.projects.tasktracker.auth.web.dto.internal.SignUpResult;
@@ -41,7 +41,7 @@ public class AuthService {
         var accessToken = jwtService.generateAccessToken(userPrincipal);
         var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
-        authEventProducer.sendUserRegisteredEvent(EmailSendingTaskMessage.builder()
+        authEventProducer.sendUserRegisteredEvent(UserWelcomeEmailEvent.builder()
                         .email(createdUser.email())
                         .title("Task tracker greeting")
                         .message(String.format("Hello, %s! Thank you for choosing to use our task tracker.", createdUser.username()))

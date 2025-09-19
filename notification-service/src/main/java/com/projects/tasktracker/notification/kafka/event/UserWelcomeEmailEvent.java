@@ -1,9 +1,9 @@
-package com.projects.tasktracker.auth.messaging.event;
+package com.projects.tasktracker.notification.kafka.event;
 
 import lombok.Builder;
 
 @Builder
-public record EmailSendingTaskMessage(
+public record UserWelcomeEmailEvent(
         String email,
         String title,
         String message) {

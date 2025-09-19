@@ -1,7 +1,7 @@
-package com.projects.tasktracker.notification.messaging.consumer;
+package com.projects.tasktracker.notification.kafka.consumer;
 
 import com.projects.tasktracker.notification.config.props.KafkaTopicProperties;
-import com.projects.tasktracker.notification.messaging.event.EmailSendingTaskMessage;
+import com.projects.tasktracker.notification.kafka.event.UserWelcomeEmailEvent;
 import com.projects.tasktracker.notification.service.MailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,11 +17,11 @@ public class EmailEventConsumer {
     private final KafkaTopicProperties kafkaTopicProperties;
 
     @KafkaListener(topics = "#{kafkaTopicProperties.emailSendingTasks}")
-    public void consumeEmailEvent(EmailSendingTaskMessage emailMessage) {
-        log.info("Consuming the message from email-sending-tasks-topic Topic:: {}", emailMessage);
+    public void consumeEmailEvent(UserWelcomeEmailEvent userWelcomeEmailEvent) {
+        log.info("Consuming the message from email-sending-tasks-topic Topic:: {}", userWelcomeEmailEvent);
 
-        mailService.sendEmailMessage(emailMessage.email(), emailMessage.title(), emailMessage.message());
+        mailService.sendEmailMessage(userWelcomeEmailEvent.email(), userWelcomeEmailEvent.title(), userWelcomeEmailEvent.message());
 
-        log.info("Successfully processed message for {}", emailMessage.email());
+        log.info("Successfully processed message for {}", userWelcomeEmailEvent.email());
     }
 }
