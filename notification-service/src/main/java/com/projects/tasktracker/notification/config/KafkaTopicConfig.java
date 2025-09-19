@@ -1,6 +1,6 @@
-package com.projects.tasktracker.auth.config;
+package com.projects.tasktracker.notification.config;
 
-import com.projects.tasktracker.auth.config.prop.KafkaTopicProperties;
+import com.projects.tasktracker.notification.config.props.KafkaTopicProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.admin.NewTopic;
 import org.springframework.context.annotation.Bean;

@@ -1,0 +1,45 @@
+spring:
+  config:
+    import: optional:file:./user-service/.env.standalone[.properties]
+    activate:
+      on-profile: local-cloud
+  kafka:
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER_HOST:localhost}:${KAFKA_BOOTSTRAP_SERVER_PORT:9092}
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: '*'
+        spring.json.type.mapping: emailTask:com.projects.tasktracker.notification.messaging.event.EmailSendingTaskMessage
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        debug: false
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+eureka:
+  instance:
+    hostname: ${SERVER_HOST:localhost}
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+application:
+  kafka:
+    topics:
+      email-sending-tasks: ${EMAIL_SENDING_TASKS_TOPIC:EMAIL_SENDING_TASKS}
+  mail:
+    from: ${APPLICATION_MAIL_FROM:noreply@task-tracker.flomaxter.com}

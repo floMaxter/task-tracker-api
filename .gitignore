@@ -16,3 +16,6 @@ build/
 logs/
 *.log
 *.out
+
+# Environment variable file
+notification-service/.env.local-cloud
