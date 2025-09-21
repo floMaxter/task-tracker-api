@@ -39,8 +39,4 @@ public class KafkaProducerProperties {
     public String getMaxInFlightRequestsPerConnection() {
         return properties.get("max.in.flight.requests.per.connection");
     }
-
-    public String getSpringJsonTypeMapping() {
-        return properties.get("spring.json.type.mapping");
-    }
 }

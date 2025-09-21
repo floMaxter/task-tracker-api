@@ -1,4 +1,4 @@
-package com.projects.tasktracker.notification.kafka.event;
+package com.projects.tasktracker.core.kafka.event;
 
 import lombok.Builder;
 

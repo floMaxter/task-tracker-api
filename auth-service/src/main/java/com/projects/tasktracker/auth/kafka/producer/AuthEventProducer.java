@@ -1,7 +1,7 @@
 package com.projects.tasktracker.auth.kafka.producer;
 
 import com.projects.tasktracker.auth.config.prop.KafkaTopicProperties;
-import com.projects.tasktracker.auth.kafka.event.UserWelcomeEmailEvent;
+import com.projects.tasktracker.core.kafka.event.UserWelcomeEmailEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.core.KafkaTemplate;

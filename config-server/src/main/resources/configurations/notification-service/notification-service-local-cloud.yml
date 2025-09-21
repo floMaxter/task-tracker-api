@@ -12,7 +12,6 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: '*'
-        spring.json.type.mapping: userWelcomeEmailEvent:com.projects.tasktracker.notification.kafka.event.UserWelcomeEmailEvent
   mail:
     host: ${MAIL_HOST}
     port: ${MAIL_PORT}

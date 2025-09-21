@@ -1,7 +1,7 @@
 package com.projects.tasktracker.auth.config;
 
 import com.projects.tasktracker.auth.config.prop.KafkaProducerProperties;
-import com.projects.tasktracker.auth.kafka.event.UserWelcomeEmailEvent;
+import com.projects.tasktracker.core.kafka.event.UserWelcomeEmailEvent;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.springframework.context.annotation.Bean;
@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
-import org.springframework.kafka.support.serializer.JsonSerializer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +31,6 @@ public class KafkaConfig {
         config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, kafkaProducerProperties.getRequestTimeout());
         config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, kafkaProducerProperties.getEnableIdempotence());
         config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, kafkaProducerProperties.getMaxInFlightRequestsPerConnection());
-        config.put(JsonSerializer.TYPE_MAPPINGS, kafkaProducerProperties.getSpringJsonTypeMapping());
 
         return config;
     }

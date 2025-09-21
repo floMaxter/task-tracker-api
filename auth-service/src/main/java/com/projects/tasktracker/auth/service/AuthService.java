@@ -2,7 +2,6 @@ package com.projects.tasktracker.auth.service;
 
 import com.projects.tasktracker.auth.client.user.UserServiceClient;
 import com.projects.tasktracker.auth.client.user.dto.request.CreateUserRequest;
-import com.projects.tasktracker.auth.kafka.event.UserWelcomeEmailEvent;
 import com.projects.tasktracker.auth.kafka.producer.AuthEventProducer;
 import com.projects.tasktracker.auth.security.jwt.JwtService;
 import com.projects.tasktracker.auth.web.dto.internal.SignInResult;
@@ -11,6 +10,7 @@ import com.projects.tasktracker.auth.web.dto.internal.UserPrincipal;
 import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
 import com.projects.tasktracker.auth.web.dto.response.PublicKeyResponse;
+import com.projects.tasktracker.core.kafka.event.UserWelcomeEmailEvent;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -46,6 +46,11 @@ public class AuthService {
                         .title("Task tracker greeting")
                         .message(String.format("Hello, %s! Thank you for choosing to use our task tracker.", createdUser.username()))
                 .build());
+
+//        authEventProducer.sendUserRegisteredEvent(new UserWelcomeEmailEvent(
+//                createdUser.email(),
+//                "Task tracker greeting",
+//                String.format("Hello, %s! Thank you for choosing to use our task tracker.", createdUser.username())));
 
         return SignUpResult.builder()
                 .username(createdUser.username())

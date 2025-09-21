@@ -29,6 +29,9 @@ ext {
 }
 
 dependencies {
+	// Common
+	implementation project(":core")
+
 	// Spring
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
