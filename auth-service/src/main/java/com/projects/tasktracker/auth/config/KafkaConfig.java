@@ -17,20 +17,20 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KafkaConfig {
 
-    private final KafkaProducerProperties kafkaProducerProperties;
+    private final KafkaProducerProperties producerProperties;
 
-    Map<String, Object> producerConfig() {
+    public Map<String, Object> producerConfig() {
         var config = new HashMap<String, Object>();
 
-        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaProducerProperties.getBootstrapServers());
-        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, kafkaProducerProperties.getKeySerializer());
-        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, kafkaProducerProperties.getValueSerializer());
-        config.put(ProducerConfig.ACKS_CONFIG, kafkaProducerProperties.getAcks());
-        config.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, kafkaProducerProperties.getDeliveryTimeout());
-        config.put(ProducerConfig.LINGER_MS_CONFIG, kafkaProducerProperties.getLinger());
-        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, kafkaProducerProperties.getRequestTimeout());
-        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, kafkaProducerProperties.getEnableIdempotence());
-        config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, kafkaProducerProperties.getMaxInFlightRequestsPerConnection());
+        config.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, producerProperties.getBootstrapServers());
+        config.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, producerProperties.getKeySerializer());
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, producerProperties.getValueSerializer());
+        config.put(ProducerConfig.ACKS_CONFIG, producerProperties.getAcks());
+        config.put(ProducerConfig.DELIVERY_TIMEOUT_MS_CONFIG, producerProperties.getDeliveryTimeout());
+        config.put(ProducerConfig.LINGER_MS_CONFIG, producerProperties.getLinger());
+        config.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, producerProperties.getRequestTimeout());
+        config.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, producerProperties.getEnableIdempotence());
+        config.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, producerProperties.getMaxInFlightRequestsPerConnection());
 
         return config;
     }
