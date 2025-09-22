@@ -10,7 +10,8 @@ import com.projects.tasktracker.auth.web.dto.internal.UserPrincipal;
 import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
 import com.projects.tasktracker.auth.web.dto.response.PublicKeyResponse;
-import com.projects.tasktracker.core.kafka.event.UserWelcomeEmailEvent;
+import com.projects.tasktracker.auth.web.mapper.AuthResultMapper;
+import com.projects.tasktracker.auth.web.mapper.EmailEventMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,6 +29,8 @@ public class AuthService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final AuthEventProducer authEventProducer;
+    private final AuthResultMapper authResultMapper;
+    private final EmailEventMapper emailEventMapper;
 
     public SignUpResult signUp(SignUpRequest signUpRequest) {
         var createdUser = userServiceClient.createUser(CreateUserRequest.builder()
@@ -41,18 +44,10 @@ public class AuthService {
         var accessToken = jwtService.generateAccessToken(userPrincipal);
         var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
-        authEventProducer.sendUserRegisteredEvent(UserWelcomeEmailEvent.builder()
-                        .email(createdUser.email())
-                        .title("Task tracker greeting")
-                        .message(String.format("Hello, %s! Thank you for choosing to use our task tracker.", createdUser.username()))
-                .build());
+        var userWelcomeEmailEvent = emailEventMapper.toUserWelcomeEmailEvent(createdUser);
+        authEventProducer.sendUserRegisteredEvent(userWelcomeEmailEvent);
 
-        return SignUpResult.builder()
-                .username(createdUser.username())
-                .email(createdUser.email())
-                .jwtAccessToken(accessToken)
-                .jwtRefreshToken(refreshToken)
-                .build();
+        return authResultMapper.toSignUpResult(createdUser.username(), createdUser.email(), accessToken, refreshToken);
     }
 
     public SignInResult signIn(SignInRequest signInRequest) {
@@ -64,12 +59,7 @@ public class AuthService {
         var accessToken = jwtService.generateAccessToken(userPrincipal);
         var refreshToken = jwtService.generateRefreshToken(userPrincipal);
 
-        return SignInResult.builder()
-                .id(userSummary.id())
-                .email(userSummary.email())
-                .jwtAccessToken(accessToken)
-                .jwtRefreshToken(refreshToken)
-                .build();
+        return authResultMapper.toSignInResult(userSummary.id(), userSummary.email(), accessToken, refreshToken);
     }
 
     public PublicKeyResponse getAccessTokenPublicKey() {
