@@ -1,4 +1,4 @@
-package com.projects.tasktracker.auth.config.prop;
+package com.projects.tasktracker.user.config.prop;
 
 import lombok.Getter;
 import lombok.Setter;

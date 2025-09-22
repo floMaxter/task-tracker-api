@@ -2,7 +2,6 @@ package com.projects.tasktracker.auth.service;
 
 import com.projects.tasktracker.auth.client.user.UserServiceClient;
 import com.projects.tasktracker.auth.client.user.dto.request.CreateUserRequest;
-import com.projects.tasktracker.auth.kafka.producer.AuthEventProducer;
 import com.projects.tasktracker.auth.security.jwt.JwtService;
 import com.projects.tasktracker.auth.web.dto.internal.SignInResult;
 import com.projects.tasktracker.auth.web.dto.internal.SignUpResult;
@@ -11,7 +10,6 @@ import com.projects.tasktracker.auth.web.dto.request.SignInRequest;
 import com.projects.tasktracker.auth.web.dto.request.SignUpRequest;
 import com.projects.tasktracker.auth.web.dto.response.PublicKeyResponse;
 import com.projects.tasktracker.auth.web.mapper.AuthResultMapper;
-import com.projects.tasktracker.auth.web.mapper.EmailEventMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -28,9 +26,7 @@ public class AuthService {
     private final UserServiceClient userServiceClient;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    private final AuthEventProducer authEventProducer;
     private final AuthResultMapper authResultMapper;
-    private final EmailEventMapper emailEventMapper;
 
     public SignUpResult signUp(SignUpRequest signUpRequest) {
         var createdUser = userServiceClient.createUser(CreateUserRequest.builder()
@@ -43,9 +39,6 @@ public class AuthService {
         var userPrincipal = new UserPrincipal(createdUser.id(), createdUser.email());
         var accessToken = jwtService.generateAccessToken(userPrincipal);
         var refreshToken = jwtService.generateRefreshToken(userPrincipal);
-
-        var userWelcomeEmailEvent = emailEventMapper.toUserWelcomeEmailEvent(createdUser);
-        authEventProducer.sendUserRegisteredEvent(userWelcomeEmailEvent);
 
         return authResultMapper.toSignUpResult(createdUser.username(), createdUser.email(), accessToken, refreshToken);
     }

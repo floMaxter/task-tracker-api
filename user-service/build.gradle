@@ -30,6 +30,9 @@ ext {
 }
 
 dependencies {
+    // Common
+    implementation project(":core")
+
     // Spring
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -45,6 +48,9 @@ dependencies {
 
     // Migration
     implementation 'org.flywaydb:flyway-database-postgresql'
+
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
 
     // Utils
     compileOnly 'org.projectlombok:lombok'

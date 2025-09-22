@@ -1,7 +1,7 @@
-package com.projects.tasktracker.auth.web.mapper;
+package com.projects.tasktracker.user.outbox.mapper;
 
-import com.projects.tasktracker.auth.client.user.dto.response.CreateUserResponse;
 import com.projects.tasktracker.core.kafka.event.UserWelcomeEmailEvent;
+import com.projects.tasktracker.user.web.dto.response.CreateUserResponse;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Component
-@ConfigurationProperties(prefix = "app.constraints")
+@ConfigurationProperties(prefix = "application.constraints")
 @Getter
 @Setter
 public class ConstraintMessagesProperties {

@@ -5,6 +5,10 @@ public class GenericApplicationException extends RuntimeException {
         super(message);
     }
 
+    public GenericApplicationException(Throwable cause) {
+        super(cause);
+    }
+
     public GenericApplicationException(String message, Throwable cause) {
         super(message, cause);
     }
