@@ -47,11 +47,6 @@ public class AuthService {
                         .message(String.format("Hello, %s! Thank you for choosing to use our task tracker.", createdUser.username()))
                 .build());
 
-//        authEventProducer.sendUserRegisteredEvent(new UserWelcomeEmailEvent(
-//                createdUser.email(),
-//                "Task tracker greeting",
-//                String.format("Hello, %s! Thank you for choosing to use our task tracker.", createdUser.username())));
-
         return SignUpResult.builder()
                 .username(createdUser.username())
                 .email(createdUser.email())

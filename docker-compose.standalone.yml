@@ -21,6 +21,17 @@ services:
       - task-db-data:/var/lib/postgresql/data
     networks:
       - tack-tracker-network
+  notification-postgres-db:
+    image: postgres:15-alpine
+    container_name: task-tracker-notification-db
+    env_file:
+      - notification-service/.env.local-cloud
+    ports:
+      - "5434:5432"
+    volumes:
+      - notification-db-data:/var/lib/postgresql/data
+    networks:
+      - tack-tracker-network
 
   kafka-1-s:
     image: bitnami/kafka:latest
@@ -100,6 +111,7 @@ services:
 volumes:
   user-db-data:
   task-db-data:
+  notification-db-data:
   kafka-data-1-s:
   kafka-data-2-s:
   kafka-data-3-s:
