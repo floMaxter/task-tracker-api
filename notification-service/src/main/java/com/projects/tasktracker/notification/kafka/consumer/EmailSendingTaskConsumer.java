@@ -1,6 +1,6 @@
 package com.projects.tasktracker.notification.kafka.consumer;
 
-import com.projects.tasktracker.core.kafka.event.UserWelcomeEmailEvent;
+import com.projects.tasktracker.core.kafka.event.EmailSendingTask;
 import com.projects.tasktracker.notification.config.props.KafkaTopicProperties;
 import com.projects.tasktracker.notification.domain.ProcessedEvent;
 import com.projects.tasktracker.notification.exeption.NonRetryableException;
@@ -20,7 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @KafkaListener(topics = "#{kafkaTopicProperties.emailSendingTasks}")
-public class EmailEventConsumer {
+public class EmailSendingTaskConsumer {
 
     private final MailService mailService;
     private final ProcessedEventRepository processedEventRepository;
@@ -28,9 +28,9 @@ public class EmailEventConsumer {
 
     @Transactional
     @KafkaHandler
-    public void consumeEmailEvent(@Payload UserWelcomeEmailEvent userWelcomeEmailEvent,
+    public void consumeEmailEvent(@Payload EmailSendingTask emailSendingTask,
                                   @Header("messageId") String messageId) {
-        log.info("Consuming the message from email-sending-tasks-topic Topic: {}", userWelcomeEmailEvent);
+        log.info("Consuming the message from email-sending-tasks-topic Topic: {}", emailSendingTask);
 
         var maybeProcessedEvent = processedEventRepository.findByMessageId(messageId);
         if (maybeProcessedEvent.isPresent()) {
@@ -39,18 +39,18 @@ public class EmailEventConsumer {
         }
 
         mailService.sendEmailMessage(
-                userWelcomeEmailEvent.email(),
-                userWelcomeEmailEvent.title(),
-                userWelcomeEmailEvent.message()
+                emailSendingTask.email(),
+                emailSendingTask.title(),
+                emailSendingTask.message()
         );
 
         try {
-            processedEventRepository.save(new ProcessedEvent(messageId, userWelcomeEmailEvent.email()));
+            processedEventRepository.save(new ProcessedEvent(messageId, emailSendingTask.email()));
         } catch (DataIntegrityViolationException ex) {
             log.error("Exception during saving processed event: {}", ex.getMessage());
             throw new NonRetryableException(ex);
         }
 
-        log.info("Successfully processed message for {}", userWelcomeEmailEvent.email());
+        log.info("Successfully processed message for {}", emailSendingTask.email());
     }
 }

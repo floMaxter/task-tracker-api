@@ -1,7 +1,7 @@
 package com.projects.tasktracker.user.config;
 
 
-import com.projects.tasktracker.core.kafka.event.UserWelcomeEmailEvent;
+import com.projects.tasktracker.core.kafka.event.EmailSendingTask;
 import com.projects.tasktracker.user.config.prop.KafkaProducerProperties;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -37,12 +37,12 @@ public class KafkaConfig {
     }
 
     @Bean
-    public ProducerFactory<String, UserWelcomeEmailEvent> producerFactory() {
+    public ProducerFactory<String, EmailSendingTask> producerFactory() {
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
     @Bean
-    public KafkaTemplate<String, UserWelcomeEmailEvent> kafkaTemplate() {
+    public KafkaTemplate<String, EmailSendingTask> kafkaTemplate() {
         return new KafkaTemplate<>(producerFactory());
     }
 }
