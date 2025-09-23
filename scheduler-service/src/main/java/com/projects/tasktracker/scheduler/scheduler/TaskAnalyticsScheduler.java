@@ -13,8 +13,7 @@ public class TaskAnalyticsScheduler {
 
     private final TaskAnalyticsService taskAnalyticsService;
 
-//    @Scheduled(cron = "0 0 8 * * ?")
-    @Scheduled(fixedDelay = 120_000)
+    @Scheduled(cron = "0 0 0 * * ?")
     public void runDailyTaskReport() {
         log.info("Task analytics scheduler started");
         taskAnalyticsService.processTasksForAllUsers();
