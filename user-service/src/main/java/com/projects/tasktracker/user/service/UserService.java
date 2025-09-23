@@ -19,6 +19,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,12 @@ public class UserService {
         var findUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
         return userMapper.toUserResponse(findUser);
+    }
+
+    public List<UserSummaryResponse> findAllSummaries() {
+        return userRepository.findAll().stream()
+                .map(userMapper::toUserSummaryResponse)
+                .toList();
     }
 
     public UserCredentialsResponse getUserCredentialsByEmail(String email) {

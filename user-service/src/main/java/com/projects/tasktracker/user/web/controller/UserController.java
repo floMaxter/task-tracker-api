@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
@@ -31,6 +33,11 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public CreateUserResponse createUser(@Valid @RequestBody CreateUserRequest createUserRequest) {
         return userService.createUser(createUserRequest);
+    }
+
+    @GetMapping("/summary")
+    public List<UserSummaryResponse> getAllUserSummaries() {
+        return userService.findAllSummaries();
     }
 
     @GetMapping("/{user-id}")
