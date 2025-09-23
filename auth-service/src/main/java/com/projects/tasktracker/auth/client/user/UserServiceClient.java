@@ -25,13 +25,17 @@ public class UserServiceClient {
                 .body(createUserRequest)
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (req, resp) -> {
-                    throw new UserServiceClientException(String.format("4xx from user-service when trying to create user" +
-                            "statusCode=%s, statusText=%s", resp.getStatusCode(), resp.getStatusText()
+                    throw new UserServiceClientException(String.format(
+                            "4xx from user-service when trying to create user with username=%s and email=%s",
+                            createUserRequest.username(),
+                            createUserRequest.email()
                     ));
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, (req, resp) -> {
-                    throw new UserServiceServerException(String.format("5xx from user-service when trying to create user" +
-                            "statusCode=%s, statusText=%s", resp.getStatusCode(), resp.getStatusText()
+                    throw new UserServiceServerException(String.format(
+                            "5xx from user-service when trying to create user with username=%s and email=%s",
+                            createUserRequest.username(),
+                            createUserRequest.email()
                     ));
                 })
                 .toEntity(CreateUserResponse.class)
@@ -43,14 +47,14 @@ public class UserServiceClient {
                 .uri("/api/v1/users/by-email/" + email + "/credentials")
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (req, resp) -> {
-                    throw new UserServiceClientException(String.format("4xx from user-service when trying to create user" +
-                            "statusCode=%s, statusText=%s", resp.getStatusCode(), resp.getStatusText()
-                    ));
+                    throw new UserServiceClientException(
+                            String.format("4xx from user-service when trying to get user credential by email=%s", email)
+                    );
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, (req, resp) -> {
-                    throw new UserServiceServerException(String.format("5xx from user-service when trying to create user" +
-                            "statusCode=%s, statusText=%s", resp.getStatusCode(), resp.getStatusText()
-                    ));
+                    throw new UserServiceServerException(
+                            String.format("5xx from user-service when trying to get user credential by email=%s", email)
+                    );
                 })
                 .toEntity(UserCredentialsResponse.class)
                 .getBody();
@@ -61,14 +65,14 @@ public class UserServiceClient {
                 .uri("/api/v1/users/by-email/" + email + "/summary")
                 .retrieve()
                 .onStatus(HttpStatusCode::is4xxClientError, (req, resp) -> {
-                    throw new UserServiceClientException(String.format("4xx from user-service when trying to create user" +
-                            "statusCode=%s, statusText=%s", resp.getStatusCode(), resp.getStatusText()
-                    ));
+                    throw new UserServiceClientException(
+                            String.format("4xx from user-service when trying to get user summary by email=%s", email)
+                    );
                 })
                 .onStatus(HttpStatusCode::is5xxServerError, (req, resp) -> {
-                    throw new UserServiceServerException(String.format("5xx from user-service when trying to create user" +
-                            "statusCode=%s, statusText=%s", resp.getStatusCode(), resp.getStatusText()
-                    ));
+                    throw new UserServiceServerException(
+                            String.format("5xx from user-service when trying to get user summary by email=%s", email)
+                    );
                 })
                 .toEntity(UserSummaryResponse.class)
                 .getBody();

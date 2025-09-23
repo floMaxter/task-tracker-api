@@ -29,7 +29,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorResponse(ex.getMessage()));
+                .body(new ErrorResponse("Unable to process your request right now. Please check input or try again later."));
     }
 
     @ExceptionHandler(UserServiceServerException.class)
@@ -37,7 +37,7 @@ public class GlobalExceptionHandler {
         log.warn("[Handle] User service server error (UserServiceServerException): {}", ex.getMessage());
         return ResponseEntity
                 .status(HttpStatus.BAD_GATEWAY)
-                .body(new ErrorResponse(ex.getMessage()));
+                .body(new ErrorResponse("User service is temporarily unavailable. Please try again later."));
     }
 
     @ExceptionHandler(UserServiceException.class)
@@ -46,7 +46,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(new ErrorResponse(ex.getMessage()));
+                .body(new ErrorResponse("An unexpected error occurred while communicating with user service.учсузешщт "));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
