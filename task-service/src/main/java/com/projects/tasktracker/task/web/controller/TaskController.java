@@ -31,7 +31,7 @@ public class TaskController {
         return ResponseEntity.ok(savedTask);
     }
 
-    @GetMapping
+    @GetMapping("/me")
     public ResponseEntity<List<TaskDto>> getUserTasks(@RequestHeader("X-User-Id") String userId) {
         var tasks = taskService.getTasks(Long.parseLong(userId));
         return ResponseEntity.ok(tasks);

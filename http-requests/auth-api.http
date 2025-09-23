@@ -38,7 +38,7 @@ POST localhost:8222/api/v1/auth/sign-in
 Content-Type: application/json
 
 {
-  "email": "username_12@gmail.com",
+  "email": "username_10@gmail.com",
   "password": "password"
 }
 
