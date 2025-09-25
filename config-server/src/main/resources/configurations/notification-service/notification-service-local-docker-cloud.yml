@@ -3,9 +3,9 @@ server:
 
 spring:
   config:
-    import: optional:file:./scheduler-service/.env.local-cloud[.properties]
+    import: optional:file:./scheduler-service/.env.local-docker-cloud[.properties]
     activate:
-      on-profile: local-cloud
+      on-profile: local-docker-cloud
   datasource:
     url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
     username: ${POSTGRES_USER}
@@ -20,6 +20,7 @@ spring:
   flyway:
     default-schema: ${POSTGRES_SCHEMA}
   kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
     consumer:
       bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
       group-id: notification-service-group
@@ -43,7 +44,7 @@ spring:
 
 eureka:
   instance:
-    hostname: ${SERVER_HOST:localhost}
+    hostname: ${SERVER_HOST:task-tracker-notification-service}
   client:
     service-url:
       defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/

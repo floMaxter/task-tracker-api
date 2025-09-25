@@ -3,12 +3,12 @@ server:
 
 spring:
   config:
-    import: optional:file:./auth-service/.env.local-cloud[.properties]
+    import: optional:file:./auth-service/.env.local-docker-cloud[.properties]
     activate:
-      on-profile: local-cloud
+      on-profile: local-docker-cloud
 eureka:
   instance:
-    hostname: ${SERVER_HOST:localhost}
+    hostname: ${SERVER_HOST:task-tracker-auth-service}
   client:
     service-url:
       defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
