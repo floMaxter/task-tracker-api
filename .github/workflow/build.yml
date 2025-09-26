@@ -1,0 +1,56 @@
+name: Java Build & Push Microservices
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        service:
+          - auth-service
+          - config-server
+          - discovery-server
+          - gateway
+          - notification-service
+          - scheduler-service
+          - task-service
+          - user-service
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Make gradlew executable
+        run: chmod +x gradlew
+
+      - name: Build JAR
+        run: ./gradlew :${{ matrix.service }}:bootJar
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          build-args: |
+            JAR_FILE=${{ matrix.service }}/build/libs/${{ matrix.service }}-0.0.1-SNAPSHOT.jar
+          tags: |
+            ${{ env.DOCKERHUB_USER }}/task-tracker-${{ matrix.service }}-service:latest
+            ${{ env.DOCKERHUB_USER }}/task-tracker-${{ matrix.service }}-service:${{ github.run_number }}
