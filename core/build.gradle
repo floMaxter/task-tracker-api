@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.projects.tasktracker'
+version = '0.0.1-SNAPSHOT'
+description = 'core'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(21)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('lombokVersion', '1.18.34')
+}
+
+dependencies {
+    // Utils
+    compileOnly "org.projectlombok:lombok:$lombokVersion"
+    annotationProcessor "org.projectlombok:lombok:$lombokVersion"
+}

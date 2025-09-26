@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: user-service
+app:
+  constraints:
+    messages:
+      idx_users_email: "Email already exists"
+
+logging:
+  level:
+    root: info

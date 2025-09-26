@@ -1,0 +1,30 @@
+server:
+  port: ${SERVER_PORT:8083}
+
+spring:
+  config:
+    import: optional:file:./task-service/.env.local-docker-cloud[.properties]
+    activate:
+      on-profile: local-docker-cloud
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      default_schema: ${POSTGRES_SCHEMA}
+    open-in-view: false
+  flyway:
+    default-schema: ${POSTGRES_SCHEMA}
+
+eureka:
+  instance:
+    hostname: ${SERVER_HOST:task-tracker-task-service}
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
+    register-with-eureka: true
+    fetch-registry: true

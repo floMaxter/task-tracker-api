@@ -1,0 +1,59 @@
+server:
+  port: ${SERVER_PORT:8084}
+
+spring:
+  config:
+    import: optional:file:./scheduler-service/.env.local-docker-cloud[.properties]
+    activate:
+      on-profile: local-docker-cloud
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      default_schema: ${POSTGRES_SCHEMA}
+    open-in-view: false
+  flyway:
+    default-schema: ${POSTGRES_SCHEMA}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+    consumer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      group-id: notification-service-group
+      auto-offset-reset: earliest
+      properties:
+        spring.json.trusted.packages: com.projects.tasktracker.core.kafka.event
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        debug: false
+        transport:
+          protocol: smtp
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
+eureka:
+  instance:
+    hostname: ${SERVER_HOST:task-tracker-notification-service}
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+application:
+  kafka:
+    topics:
+      email-sending-tasks: ${EMAIL_SENDING_TASKS_TOPIC:EMAIL_SENDING_TASKS}
+  mail:
+    from: ${APPLICATION_MAIL_FROM:noreply@task-tracker.flomaxter.com}

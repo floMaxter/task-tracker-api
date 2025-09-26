@@ -1,0 +1,49 @@
+server:
+  port: ${SERVER_PORT:8082}
+
+spring:
+  config:
+    import: optional:file:./user-service/.env.local-cloud[.properties]
+    activate:
+      on-profile: local-cloud
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties.hibernate:
+      show_sql: true
+      format_sql: true
+      default_schema: ${POSTGRES_SCHEMA}
+    open-in-view: false
+  flyway:
+    default-schema: ${POSTGRES_SCHEMA}
+  kafka:
+    producer:
+      bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      properties:
+        delivery.timeout.ms: 20000
+        request.timeout.ms: 10000
+        linger.ms: 0
+        enable.idempotence: true
+        max.in.flight.requests.per.connection: 5
+eureka:
+  instance:
+    hostname: ${SERVER_HOST:localhost}
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+application:
+  kafka:
+    topics:
+      email-sending-tasks: ${EMAIL_SENDING_TASKS_TOPIC:EMAIL_SENDING_TASKS}
+  constraints:
+    messages:
+      idx_users_email: "Email already exists"

@@ -1,0 +1,32 @@
+server:
+  port: ${SERVER_PORT}
+
+spring:
+  config:
+    import: optional:file:./auth-service/.env.local-cloud[.properties]
+    activate:
+      on-profile: local-cloud
+eureka:
+  instance:
+    hostname: ${SERVER_HOST:localhost}
+  client:
+    service-url:
+      defaultZone: http://${DISCOVERY_SERVER_HOST}:${DISCOVERY_SERVER_PORT}/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+application:
+  services:
+    user-service:
+      base-uri: http://user-service
+      connection-timeout: 5s
+      read-timeout: 10s
+  jwt:
+    access-token:
+      private-key-path: keys/private.pem
+      public-key-path: keys/public.pem
+      expiration: ${ACCESS_TOKEN_EXPIRATION:30m}
+    refresh-token:
+      private-key-path: keys/private.pem
+      public-key-path: keys/public.pem
+      expiration: ${REFRESH_TOKEN_EXPIRATION:1d}
