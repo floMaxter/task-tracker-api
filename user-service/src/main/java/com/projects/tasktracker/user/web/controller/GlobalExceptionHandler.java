@@ -59,7 +59,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        log.warn("[Handle] Validation exception (DataIntegrityViolationException): {}", ex.getMessage());
+        log.warn("[Handle!] Validation exception (DataIntegrityViolationException): {}", ex.getMessage());
 
         String message = constraintMessageResolver.resolveMessage(
                 Optional.ofNullable(ex.getRootCause())
