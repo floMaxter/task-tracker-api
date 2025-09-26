@@ -37,6 +37,10 @@ jobs:
               - 'task-service/**'
             user-service:
               - 'user-service/**'
+            all:
+              - 'docker-compose*.yml'
+              - '.github/**'
+              - 'README.md'
 
       - name: Prepare matrix
         id: matrix
