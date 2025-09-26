@@ -52,5 +52,5 @@ jobs:
           build-args: |
             JAR_FILE=${{ matrix.service }}/build/libs/${{ matrix.service }}-0.0.1-SNAPSHOT.jar
           tags: |
-            ${{ secrets.DOCKERHUB_USERNAME }}/task-tracker-${{ matrix.service }}-service:latest
-            ${{ secrets.DOCKERHUB_USERNAME }}/task-tracker-${{ matrix.service }}-service:${{ github.run_number }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/task-tracker-${{ matrix.service }}:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/task-tracker-${{ matrix.service }}:${{ github.run_number }}
