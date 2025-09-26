@@ -28,8 +28,8 @@ POST localhost:8222/api/v1/auth/sign-up
 Content-Type: application/json
 
 {
-  "username": "Username_47",
-  "email": "username_47@gmail.com",
+  "username": "Username_48",
+  "email": "username_48@gmail.com",
   "password": "password"
 }
 
@@ -45,4 +45,15 @@ Content-Type: application/json
 ### Validate access token using gateway
 POST localhost:8222/api/v1/auth/validate
 Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ1c2VybmFtZV8xMkBnbWFpbC5jb20iLCJpYXQiOjE3NTc2NjIzMjMsImV4cCI6MTc1NzY2NDEyM30.k2gpCsYuGytCrvr0Qt4ucwL42Ut5rywY3aqx7XoSWko
+
+### SIGN-UP Remote server using gateway
+# @no-cookie-jar
+POST 176.108.245.86:8222/api/v1/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "Username_1",
+  "email": "username_1@gmail.com",
+  "password": "password"
+}
 
