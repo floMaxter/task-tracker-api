@@ -1,27 +1,50 @@
 name: Java Build & Push Microservices
 
 on:
-  pull_request:
+  push:
     branches:
       - main
-  push:
+  pull_request:
     branches:
       - main
 
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      services: ${{ steps.filter.outputs.changes }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Detect changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            auth-service:
+              - 'auth-service/**'
+            config-server:
+              - 'config-server/**'
+            discovery-server:
+              - 'discovery-server/**'
+            gateway:
+              - 'gateway/**'
+            notification-service:
+              - 'notification-service/**'
+            scheduler-service:
+              - 'scheduler-service/**'
+            task-service:
+              - 'task-service/**'
+            user-service:
+              - 'user-service/**'
+
   build:
+    needs: changes
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        service:
-          - auth-service
-          - config-server
-          - discovery-server
-          - gateway
-          - notification-service
-          - scheduler-service
-          - task-service
-          - user-service
+        service: ${{ fromJSON(needs.changes.outputs.services) }}
+      max-parallel: 4
     steps:
       - uses: actions/checkout@v4
 
